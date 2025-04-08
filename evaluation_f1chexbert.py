@@ -45,15 +45,15 @@ def evaluate(prediction_file, groundtruth_file, task_name):
 
 
     # Save results
-    with open("evaluation_results.json", "w", encoding="utf-8") as out_f:
+    with open("evaluation_results_f1chexbert.json", "w", encoding="utf-8") as out_f:
         json.dump(samples, out_f, indent=2)
     print("Evaluation complete. Results saved to evaluation_results.json")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate medical text generation outputs.")
-    parser.add_argument('--prediction_file', default= 'BioLaySumm2025-eLife_result.json', type=str, required=True, help='Path to the predictions JSON file.')
-    parser.add_argument('--groundtruth_file',  default= 'BioLaySumm2025-eLife_result.json', type=str, required=True, help='Path to the ground truth JSON file.')
-    parser.add_argument('--task_name',  default= 'Lay_Summarisation', type=str, required=True, help='The name of the task.') #"Lay_Summarisation" "Radiology_Report_Generation"
+    parser.add_argument('--prediction_file', type=str, required=True,default= 'BioLaySumm2025-eLife_result.json', help='Path to the predictions JSON file.')
+    parser.add_argument('--groundtruth_file', type=str, default= 'BioLaySumm2025-eLife_result.json',required=True, help='Path to the ground truth JSON file.')
+    parser.add_argument('--task_name',  type=str,  default= 'Lay_Summarisation', required=True, help='The name of the task.') #"Lay_Summarisation" "Radiology_Report_Generation"
     args = parser.parse_args()
 
     evaluate(args.prediction_file, args.groundtruth_file, args.task_name)

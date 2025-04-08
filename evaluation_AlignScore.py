@@ -26,7 +26,6 @@ def evaluate(prediction_file, groundtruth_file, task_name):
         if task_name == 'Lay_Summarisation':
 
             AlignScore = alignScoreCS.score(context=reference_text, claim=candidate_text).item()# AlignScore
-            print(AlignScore)
 
         if task_name == 'Lay_Summarisation':
             samples.append({
@@ -36,7 +35,7 @@ def evaluate(prediction_file, groundtruth_file, task_name):
             })
 
     # Save results
-    with open("evaluation_results.json", "w", encoding="utf-8") as out_f:
+    with open("evaluation_results_AlignScore.json", "w", encoding="utf-8") as out_f:
         json.dump(samples, out_f, indent=2)
     print("Evaluation complete. Results saved to evaluation_results.json")
 

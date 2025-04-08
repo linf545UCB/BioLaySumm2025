@@ -11,13 +11,7 @@ from rouge import Rouge
 from scipy.spatial.distance import cosine
 from gritlm import GritLM
 import textstat
-# from readability import Readability
-# from sentence_transformers import SentenceTransformer, util
-# from sklearn.metrics import f1_score
-# from radgraph import RadGraph, F1RadGraph
-# from f1chexbert import F1CheXbert
-# from model_summac import SummaCZS
-# from AlignScoreCS import AlignScoreCS
+
 
 def gritlm_instruction(instruction):
     return "<|user|>\n" + instruction + "\n<|embed|>\n" if instruction else "<|embed|>\n"
@@ -26,13 +20,9 @@ def encode_sentences(model, sentences, instruction):
     return model.encode(sentences, instruction=gritlm_instruction(instruction))
 
 def compute_cosine_similarity(model, references, candidates, instruction):
-
-    # print(references)
     ref_sents = sent_tokenize(references)
     can_sents = sent_tokenize(candidates)
 
-    # print(ref_sents)
-    # input()
 
     assert len(ref_sents) == len(can_sents), "Mismatch in number of sentences."
 
@@ -54,10 +44,6 @@ def evaluate(prediction_file, groundtruth_file, task_name):
         groundtruths = json.load(gt_f)
 
     model = GritLM("GritLM/GritLM-7B", torch_dtype="auto")
-    # SummaCZS_model = SummaCZS(granularity="sentence", model_name="vitc")
-    # alignScoreCS = AlignScoreCS.from_pretrained("krotima1/AlignScoreCS")# AlignScore
-    # f1radgraph = F1RadGraph(reward_level="all")
-    # f1chexbert = F1CheXbert()
     instruction = "encode the medical text:"
 
     rouge = Rouge()
@@ -113,14 +99,6 @@ def evaluate(prediction_file, groundtruth_file, task_name):
         #     mean_reward, reward_list, hypothesis_annotation_lists, reference_annotation_lists = f1radgraph(hyps=[candidate_text], refs=[reference_text]) #f1radgraph
         #     #RadCliQ
 
-
-        # print(reference_text)
-        # print(candidate_text)
-        # print(bleu_scores)
-        # print(meteor)
-        # print(rouge_scores)
-        # print(cosine_scores)
-        # input()
         if task_name == 'Lay_Summarisation':
             samples.append({
                 "reference": reference_text,
@@ -145,15 +123,15 @@ def evaluate(prediction_file, groundtruth_file, task_name):
             })
 
     # Save results
-    with open("evaluation_results.json", "w", encoding="utf-8") as out_f:
+    with open("evaluation_results_general.json", "w", encoding="utf-8") as out_f:
         json.dump(samples, out_f, indent=2)
     print("Evaluation complete. Results saved to evaluation_results.json")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate medical text generation outputs.")
-    parser.add_argument('--prediction_file', default= 'BioLaySumm2025-eLife_result.json', type=str, required=True, help='Path to the predictions JSON file.')
-    parser.add_argument('--groundtruth_file',  default= 'BioLaySumm2025-eLife_result.json', type=str, required=True, help='Path to the ground truth JSON file.')
-    parser.add_argument('--task_name',  default= 'Lay_Summarisation', type=str, required=True, help='The name of the task.') #"Lay_Summarisation" "Radiology_Report_Generation"
+    parser.add_argument('--prediction_file', type=str, required=True,default= 'BioLaySumm2025-eLife_result.json', help='Path to the predictions JSON file.')
+    parser.add_argument('--groundtruth_file', type=str, default= 'BioLaySumm2025-eLife_result.json',required=True, help='Path to the ground truth JSON file.')
+    parser.add_argument('--task_name',  type=str,  default= 'Lay_Summarisation', required=True, help='The name of the task.') #"Lay_Summarisation" "Radiology_Report_Generation"
     args = parser.parse_args()
 
     evaluate(args.prediction_file, args.groundtruth_file, args.task_name)

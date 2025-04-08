@@ -55,7 +55,7 @@ def evaluate(prediction_file, groundtruth_file, task_name):
             })
 
     # Save results
-    with open("evaluation_results.json", "w", encoding="utf-8") as out_f:
+    with open("evaluation_results_SummaC.json", "w", encoding="utf-8") as out_f:
         json.dump(samples, out_f, indent=2)
     print("Evaluation complete. Results saved to evaluation_results.json")
 
