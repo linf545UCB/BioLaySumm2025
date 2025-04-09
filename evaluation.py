@@ -11,7 +11,8 @@ from rouge import Rouge
 from scipy.spatial.distance import cosine
 from gritlm import GritLM
 import textstat
-
+from lens import download_model, LENS
+nltk.download('punkt_tab')
 
 def gritlm_instruction(instruction):
     return "<|user|>\n" + instruction + "\n<|embed|>\n" if instruction else "<|embed|>\n"
@@ -36,6 +37,17 @@ def compute_cosine_similarity(model, references, candidates, instruction):
         scores.append(score)
     return scores
 
+def cal_lens(predictions, groundtruths):
+    lens_path = download_model("davidheineman/lens")
+    lens_metric = LENS(lens_path, rescale=True)
+
+    abstracts =[x["document"] for x in groundtruths]
+    preds = [x["generated_caption"] for x in predictions]
+    refs = [[x["reference"]] for x in groundtruths]
+    scores = lens_metric.score(abstracts, preds, refs, batch_size=16)
+    return scores
+
+
 def evaluate(prediction_file, groundtruth_file, task_name):
     # Load predictions and references
     with open(prediction_file, 'r', encoding='utf-8') as pred_f:
@@ -49,6 +61,8 @@ def evaluate(prediction_file, groundtruth_file, task_name):
     rouge = Rouge()
     chencherry = SmoothingFunction()
 
+
+    lens_scores = cal_lens(predictions, groundtruths)
     samples = []
     for i, (pred, gt) in enumerate(zip(predictions, groundtruths)):
         if i % 100 == 0:
@@ -89,8 +103,7 @@ def evaluate(prediction_file, groundtruth_file, task_name):
             fkgl = textstat.flesch_kincaid_grade(candidate_text) #Flesch-Kincaid Grade Level (FKGL)
             dcrs = textstat.dale_chall_readability_score(candidate_text) #Dale-Chall Readability Score (DCRS)
             cli = textstat.coleman_liau_index(candidate_text) #Coleman-Liau Index (CLI)
-            # r = Readability(candidate_text) #LENS 这个指标要确认一下
-            # lens = r.linsear_write()
+
         #     alignScoreCS.score(context=reference_text, claim=candidate_text)# AlignScore
         #     SummaC = SummaCZS_model.score([document_text], [candidate_text])["scores"][0] #SummaC
             
@@ -110,7 +123,7 @@ def evaluate(prediction_file, groundtruth_file, task_name):
                 "fkgl": fkgl,
                 "dcrs": dcrs,
                 "cli": cli,
-                'lens': None,
+                'lens': lens_scores[i],
             })
         else:
             samples.append({
