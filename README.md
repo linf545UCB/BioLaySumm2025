@@ -34,6 +34,12 @@ pip install gritlm
 pip install textstat
 
 pip install transformers
+
+pip install numpy==1.24.1
+
+pip install pandas==1.5.3
+
+pip install lens-metric
 ```
 
 
