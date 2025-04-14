@@ -113,17 +113,17 @@ def evaluate_all(pred_path, gold_path,task_name):
   score_dict = {}
 
   # Relevance scores
-  # score_dict['ROUGE'] = calc_rouge(preds, refs)
-  # score_dict['BLEU'] = cal_bleu(preds, refs)
-  # score_dict['METEOR'] = cal_meteor(preds, refs)  
-  # score_dict['BERTScore'] = calc_bertscore(preds, refs)
+  score_dict['ROUGE'] = calc_rouge(preds, refs)
+  score_dict['BLEU'] = cal_bleu(preds, refs)
+  score_dict['METEOR'] = cal_meteor(preds, refs)  
+  score_dict['BERTScore'] = calc_bertscore(preds, refs)
 
   # # Readability scores
-  # fkgl_score, cli_score, dcrs_score = calc_readability(preds)
-  # score_dict['FKGL'] = fkgl_score
-  # score_dict['DCRS'] = dcrs_score
-  # score_dict['CLI'] = cli_score
-  # score_dict['LENS'] = calc_lens(preds, refs, docs)
+  fkgl_score, cli_score, dcrs_score = calc_readability(preds)
+  score_dict['FKGL'] = fkgl_score
+  score_dict['DCRS'] = dcrs_score
+  score_dict['CLI'] = cli_score
+  score_dict['LENS'] = calc_lens(preds, refs, docs)
 
   # Factuality scores
   if task_name == "lay_summ":
@@ -145,8 +145,8 @@ def write_scores(score_dict, output_filepath):
       f.write(f"{key}: {value}\n")
 
 def final_score(task_name):
-  submit_dir = "./input_data"#sys.argv[1] # directory with txt files ("elife.txt" and "plos.txt") with predictions
-  truth_dir = "./reference_data"#sys.argv[2] # directory with jsonl files containing references and articles 
+  submit_dir = "./input_data"# ("elife.txt" and "plos.txt") with predictions
+  truth_dir = "./reference_data"#directory with jsonl files containing references and articles 
   output_dir = "./output"
 
   if task_name == "lay_summ":
