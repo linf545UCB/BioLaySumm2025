@@ -18,7 +18,7 @@ from sentence_transformers import SentenceTransformer
 import evaluate
 
 
-# nltk.download('punkt')
+nltk.download('punkt')
 
 def calc_rouge(preds, refs):
   # Get ROUGE F1 scores
