@@ -2,15 +2,21 @@
 
 We extrat 100 samples from the training data as the test samples. As shown in `./BioLaySumm2025-eLife_result.json`
 
-## Installing
+## Prepare Environment
+
+use prepare_env.sh to get the environment biolaysum, and run evalation script
+```
+bash prepare_env.sh
+
+source activate biolaysum
+
+python evaluation_backup.py --prediction_file  BioLaySumm2025-eLife_result.json  --groundtruth_file BioLaySumm2025-eLife_result.json --task_name lay_summ
+
+python evaluation_backup.py --prediction_file  BioLaySumm2025-eLife_result.json  --groundtruth_file BioLaySumm2025-eLife_result.json --task_name rrg
+```
 
 
-
-For the evaluation, we need to create 3 different environments to run script of different metrics.
-
-
-
-### general_metric
+<!-- ### general_metric
 
 This environment is used for runing `./evaluation.py` and `./evaluation_AlignScore.py`
 
@@ -109,5 +115,4 @@ Evaluation:
 python evaluation_f1radgraph.py --prediction_file  BioLaySumm2025-eLife_result.json  --groundtruth_file BioLaySumm2025-eLife_result.json --task_name Radiology_Report_Generation  
 
 python evaluation_f1chexbert.py --prediction_file  BioLaySumm2025-eLife_result.json  --groundtruth_file BioLaySumm2025-eLife_result.json --task_name Radiology_Report_Generation
-```
-
+``` -->
