@@ -10,9 +10,9 @@ bash prepare_env.sh
 
 source activate biolaysum
 
-python evaluation_backup.py --prediction_file  BioLaySumm2025-eLife_result.json  --groundtruth_file BioLaySumm2025-eLife_result.json --task_name lay_summ
+python evaluation_final.py --prediction_file  BioLaySumm2025-eLife_result.json  --groundtruth_file BioLaySumm2025-eLife_result.json --task_name lay_summ
 
-python evaluation_backup.py --prediction_file  BioLaySumm2025-eLife_result.json  --groundtruth_file BioLaySumm2025-eLife_result.json --task_name rrg
+python evaluation_final.py --prediction_file  BioLaySumm2025-eLife_result.json  --groundtruth_file BioLaySumm2025-eLife_result.json --task_name rrg
 ```
 
 
