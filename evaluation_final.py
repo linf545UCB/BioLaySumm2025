@@ -123,14 +123,15 @@ def evaluate_all(pred_path, gold_path,task_name):
   score_dict['FKGL'] = fkgl_score
   score_dict['DCRS'] = dcrs_score
   score_dict['CLI'] = cli_score
-  score_dict['LENS'] = calc_lens(preds, refs, docs)
+  
 
   # Factuality scores
   if task_name == "lay_summ":
     score_dict['AlignScore'] = calc_alignscore(preds, docs)
-    score_dict['similarity'] = cal_similarity(preds, docs)
+    score_dict['LENS'] = calc_lens(preds, refs, docs)
     score_dict['SummaC'] = cal_summac(preds, docs)
   else:
+    score_dict['similarity'] = cal_similarity(preds, docs)
     score_dict["f1chexbert"] = cal_f1bert(preds,refs)
     score_dict["radgraph"] = cal_radgraph(preds,refs)
 
